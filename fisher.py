@@ -168,8 +168,6 @@ while True:
                 print("syntax error\nsyntax:\n\tcreate [image name]")
             elif(command[1] not in images.keys()):
                 print("image not found")
-            elif(len(command) > 2):
-                print("excess arguments")
             else:
                 try:
                     name=input("Name: ")
