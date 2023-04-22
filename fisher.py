@@ -102,7 +102,7 @@ def loadContainer(name):
     except:
         errorMessage()
     pass
-def deleteContainer(name):
+def deleteContainer(name,delete='n'):
     flag = 0
     try:
         file=open("/etc/fisher/.container","rb")
@@ -127,7 +127,7 @@ def deleteContainer(name):
     if(flag == 0):
         while True:
             file = open("/etc/fisher/.container","wb")
-            match input("delete the container? (y/n):  "):
+            match delete:
                 case "y":
                     dictCont.pop(name)
                     pickle.dump(dictCont,file)
@@ -156,11 +156,13 @@ def typeOfContainer(root,disp):
 os.system("clear")
 while True:
     flag = 0
+    delete=False
     commandInput = input(">>> ")
     command = commandInput.split(" ")
     if(command[0] == "info" or command[0] == "start"):
         command[0] = "load"
     if(command[0] == "rm" or command[0] == "del"):
+        delete = True
         command[0] = "stop"  
     match command[0]:
         case "create":
@@ -247,7 +249,10 @@ while True:
                 print("container not found!")
                 pass
             else:
-                deleteContainer(name)
+                if(delete):
+                    deleteContainer(name,"y")
+                else:
+                    deletecontainer(name)
             pass
         case "clear":
             os.system("clear")
