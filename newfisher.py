@@ -264,6 +264,11 @@ while True:
         case "rm":
             try:
                 name = cmd[1]
+                if(name=="a" or name=="all"):
+                    cont = container.keys()
+                    for c in cont:
+                        delete(c,True)
+                    continue
             except:
                 print("syntax: rm container_name")
                 continue
@@ -302,6 +307,9 @@ stop conteiner_name
 
 rm container_name
     to delete container
+
+rm all 
+    to delete all containers
 
 help
     to display this
