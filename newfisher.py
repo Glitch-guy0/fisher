@@ -20,8 +20,8 @@ import docker
 #! update here
 #* images section
 images = {
-    "ubuntu":"",
-    "desktop":""
+    "ubuntu":"kasmweb/core-ubuntu-bionic:1.13.0-rolling",
+    "desktop":"kasmweb/ubuntu-bionic-desktop:1.10.0-rolling"
 }
 
 #* path creating section
@@ -58,8 +58,10 @@ def write():
 #? use pickle load and dump methods => import pickle
 #todo: open file in read binary mode
 fileread = open(PATH,"rb")
+print()
 try:
     containerinfo = pickle.load(fileread)
+    print(containerinfo)
 except:
     pass
 fileread.close()
@@ -81,7 +83,8 @@ for parse in containerlist:
     #todo look for kasm images only
     if(container.name in containerinfo.keys()):
     #todo match names and update
-        containerinfo.get(container.name).status = container.status
+        info = containerinfo.get(container.name)
+        info.update(status=container.status)
         pass
 #todo update file
 write()
@@ -91,17 +94,17 @@ write()
     #* get name, port, user type, password, description
 def createContainer(image,name,port,root,password,description):
     #todo check for image
-    if(image not in containerinfo.keys()):
+    if(image not in images):
         print("image not found\ninvalid image name")
         return
     
     #todo check for root and deploy
     if(root == True):
-        subprocess.getoutput(f"docker run --user 0 -itd --name {name} --shm-size=512m -p {port}:6901/tcp -e VNC_PW={password} {image}")
+        os.system(f"docker run --user 0 -itd --name {name} --shm-size=512m -p {port}:6901/tcp -e VNC_PW={password} {image}")
     else:
-        subprocess.getoutput(f"docker run -itd --name {name} --shm-size=512m -p {port}:6901/tcp -e VNC_PW={password} {image}")
+        os.system(f"docker run -itd --name {name} --shm-size=512m -p {port}:6901/tcp -e VNC_PW={password} {image}")
 #* make url
-    link = "https://localhost"+port
+    link = "https://localhost:"+port
 #* update attributes
     attributes = {
         "status":"running",
@@ -187,6 +190,7 @@ def loadContainer(name):
     subprocess.getoutput(f"docker start {name}")
     info = containerinfo.get("name")
     info.update(status="running")
+    write()
     display(name)
 
 
@@ -212,6 +216,7 @@ while True:
                 root = True
             password = input("password: ")
             description = input("description: ")
+            name = images.get(name)
             createContainer(image,name,port,root,password,description)
             print("container created")
             display(name)
