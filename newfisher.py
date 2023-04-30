@@ -52,7 +52,7 @@ containerinfo = {}
 
 # todo: open file in write binary mode
 def write():
-    filewrite = open(PATH,"ab")
+    filewrite = open(PATH,"wb")
     pickle.dump(containerinfo,filewrite) # because pickle uses binary to read & write json
     filewrite.close()
 #? use pickle load and dump methods => import pickle
@@ -61,7 +61,6 @@ fileread = open(PATH,"rb")
 print()
 try:
     containerinfo = pickle.load(fileread)
-    print(containerinfo)
 except:
     pass
 fileread.close()
@@ -89,6 +88,13 @@ for parse in containerlist:
 #todo update file
 write()
 
+#* clear functionality
+def clear():
+    if(platform.system() == "Windows"):
+        os.system("cls")
+    else:
+        os.system("clear")
+
 #* creating container
 # todo 
     #* get name, port, user type, password, description
@@ -97,6 +103,7 @@ def createContainer(image,name,port,root,password,description):
     if(image not in images):
         print("image not found\ninvalid image name")
         return
+    image = images.get(image)
     
     #todo check for root and deploy
     if(root == True):
@@ -166,8 +173,7 @@ def delete( name, delete = False):
         subprocess.getoutput(f"docker rm {name}")
         print(f"{name} deleted")
         #update
-        info = containerinfo.get(name)
-        info.pop(name)
+        containerinfo.pop(name)
     #! update file
     write()
 
@@ -216,7 +222,6 @@ while True:
                 root = True
             password = input("password: ")
             description = input("description: ")
-            name = images.get(name)
             createContainer(image,name,port,root,password,description)
             print("container created")
             display(name)
@@ -229,8 +234,8 @@ while True:
                 continue
             if(check(name)):
                 print("container not found")
-                continue
-            display(name)
+            else:
+                display(name)
             pass
         case "start":
             try:
@@ -241,7 +246,8 @@ while True:
             if(check(name)):
                 print("container not found")
                 continue
-            loadContainer(name)
+            else:
+                loadContainer(name)
             pass
         case "stop":
             try:
@@ -252,7 +258,8 @@ while True:
             if(check(name)):
                 print("container not found")
                 continue
-            delete(name)
+            else:
+                delete(name)
             pass
         case "rm":
             try:
@@ -263,7 +270,8 @@ while True:
             if(check(name)):
                 print("container not found")
                 continue
-            delete(name,True)
+            else:
+                delete(name,True)
             pass
         case "list":
             try:
@@ -301,6 +309,9 @@ help
 exit
     to exit the program
             """)
+        case "clear":
+            clear()
+            pass
         case "exit":
             exit()
         case _:
