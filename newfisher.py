@@ -16,6 +16,7 @@ import platform
 import os
 import subprocess
 import docker
+import random
 
 #! update here
 #* images section
@@ -41,29 +42,39 @@ else: #! update here
 if(not os.path.isdir(PATH)):
     print("not exists")
     os.makedirs(PATH)
+    portpath = PATH + "/Ports"
     filepath = PATH + "/Containers"
+    with open(portpath,"wb") as tempp:
+        pass
     with open(filepath,"wb") as temp:
         pass
 
 #* file initialization
+portpath = PATH+"/Ports"
 PATH = PATH+"/Containers"
 #* json file
 containerinfo = {}
+portinfo = {"ports":[]}
 
 # todo: open file in write binary mode
 def write():
     filewrite = open(PATH,"wb")
+    portwrite = open(portpath,"wb")
     pickle.dump(containerinfo,filewrite) # because pickle uses binary to read & write json
+    pickle.dump(portinfo,portwrite)
     filewrite.close()
+    portwrite.close()
 #? use pickle load and dump methods => import pickle
 #todo: open file in read binary mode
 fileread = open(PATH,"rb")
-print()
+portread = open(portpath,"rb")
 try:
     containerinfo = pickle.load(fileread)
+    portinfo = pickle.load(portread)
 except:
     pass
 fileread.close()
+portread.close()
 
 #* checking for updates due to restart / from external command
 #? if docker is not running
@@ -98,13 +109,18 @@ def clear():
 #* creating container
 # todo 
     #* get name, port, user type, password, description
-def createContainer(image,name,port,root,password,description):
+def createContainer(image,name,root,password,description):
     #todo check for image
     if(image not in images):
         print("image not found\ninvalid image name")
         return
     image = images.get(image)
-    
+    #! port info updater
+    randport = random.randint(10,99)
+    port = "60"+str(randport)
+    #* add to json file
+    temp = portinfo.get("ports")
+    temp.append(port)
     #todo check for root and deploy
     if(root == True):
         os.system(f"docker run --user 0 -itd --name {name} --shm-size=512m -p {port}:6901/tcp -e VNC_PW={password} {image}")
@@ -116,6 +132,7 @@ def createContainer(image,name,port,root,password,description):
     attributes = {
         "status":"running",
         "url": link,
+        "port":port,
         "password":password,
         "root":root,
         "description":description
@@ -173,6 +190,9 @@ def delete( name, delete = False):
         subprocess.getoutput(f"docker rm {name}")
         print(f"{name} deleted")
         #update
+        temp = portinfo.get("ports")
+        tempcontainer = containerinfo.get(name)
+        temp.remove(tempcontainer.get("port"))
         containerinfo.pop(name)
     #! update file
     write()
@@ -211,18 +231,19 @@ while True:
         case "create":
             try:
                 image = cmd[1]
+                if(image not in images.keys()):
+                    print("image not found")
+                    continue
             except:
                 print("syntax: create image_name")
                 continue
             name = input("container name: ")
-            port2 = input("port (only 2 digits): ")
-            port = "60"+port2[0]+port2[1]
             root = False
             if("y" == input("root?(y/n)(defalut 'n')")):
                 root = True
             password = input("password: ")
             description = input("description: ")
-            createContainer(image,name,port,root,password,description)
+            createContainer(image,name,root,password,description)
             print("container created")
             display(name)
             pass
@@ -264,13 +285,13 @@ while True:
         case "rm":
             try:
                 name = cmd[1]
-                if(name=="a" or name=="all"):
-                    cont = container.keys()
-                    for c in cont:
-                        delete(c,True)
-                    continue
             except:
                 print("syntax: rm container_name")
+                continue
+            if(name == "a" or name == "all"):
+                conts = containerinfo.copy().keys()
+                for c in conts:
+                    delete(c,True)
                 continue
             if(check(name)):
                 print("container not found")

@@ -1,10 +1,9 @@
-images = {
-    "ubuntu":"kasmweb/core-ubuntu-bionic:1.13.0-rolling",
-    "desktop":"kasmweb/ubuntu-bionic-desktop:1.10.0-rolling"
+port = {
+    "ports":[43,34,33]
 }
 
-
-name = input("containers naem: ")
-print(name)
-name = images.get(name)
-print(name)
+print(port.get("ports"))
+up = port.get("ports")
+up.pop(0)
+print(up)
+print(port.get("ports"))
