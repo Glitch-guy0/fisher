@@ -252,7 +252,7 @@ while True:
                 if(delete):
                     deleteContainer(name,"y")
                 else:
-                    deletecontainer(name)
+                    deleteContainer(name)
             pass
         case "clear":
             os.system("clear")
