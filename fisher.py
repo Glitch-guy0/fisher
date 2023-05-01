@@ -17,6 +17,7 @@ import os
 import subprocess
 import docker
 import random
+from sys import exit
 
 #! update here
 #* images section
