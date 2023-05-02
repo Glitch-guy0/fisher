@@ -212,10 +212,8 @@ def listContainer(container = True):
 #* load container
 def loadContainer(name):
     # check for container
-    if(check(name)):
-        return
     subprocess.getoutput(f"docker start {name}")
-    info = containerinfo.get("name")
+    info = containerinfo.get(name)
     info.update(status="running")
     write()
     display(name)
