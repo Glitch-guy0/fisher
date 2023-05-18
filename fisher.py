@@ -117,10 +117,14 @@ def createContainer(image,name,root,password,description):
         return
     image = images.get(image)
     #! port info updater
-    randport = random.randint(10,99)
-    port = "60"+str(randport)
-    #* add to json file
     temp = portinfo.get("ports")
+    while True:
+        randport = random.randint(10,99)
+        port = "60"+str(randport)
+        if(port not in temp)
+            break
+    #* add to json file
+
     temp.append(port)
     #todo check for root and deploy
     if(root == True):
