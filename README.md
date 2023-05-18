@@ -23,3 +23,6 @@ sudo docker pull kasmweb/ubuntu-bionic-desktop:1.10.0-rolling
 - can add images from the app itself
 - can run simple terminal commands
 - can run images other than kasm
+
+#Discontinued
+**Reason** not feasible to use instead you can type the command on your own
