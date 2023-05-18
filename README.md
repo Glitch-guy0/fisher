@@ -6,6 +6,7 @@ This is a python code for kasm desktop setup just for temp desktop setup **witho
 
 
 # Images to download
+have to download these images by default
 ## ubuntu
 ```bash
 sudo docker pull kasmweb/core-ubuntu-focal:1.13.0-rolling
@@ -15,5 +16,10 @@ sudo docker pull kasmweb/core-ubuntu-focal:1.13.0-rolling
 sudo docker pull kasmweb/ubuntu-bionic-desktop:1.10.0-rolling
 ```
 
->[!warning]
-> You will see all these images by default; even if you didn't download
+# Making major changes for V2
+  For version 2, software is going for a major change in the structure
+  
+## Changes
+- can add images from the app itself
+- can run simple terminal commands
+- can run images other than kasm
