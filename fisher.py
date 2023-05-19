@@ -25,7 +25,7 @@ images = {
     "ubuntu":"kasmweb/core-ubuntu-focal:1.13.0-rolling",
     "desktop":"kasmweb/ubuntu-bionic-desktop:1.10.0-rolling"
 }
-
+ip = subprocess.getoutput("ip a | grep "eth0" | grep "inet" | awk '{print $2}' | cut -d "/" -f 1")
 #* path creating section
 #! use platform.system() => import platform
 PATH = platform.system()
@@ -132,7 +132,7 @@ def createContainer(image,name,root,password,description):
     else:
         os.system(f"docker run -itd --name {name} --shm-size=512m -p {port}:6901/tcp -e VNC_PW={password} {image}")
 #* make url
-    link = "https://localhost:"+port
+    link = "https://"+ip+":"+port
 #* update attributes
     attributes = {
         "status":"running",
