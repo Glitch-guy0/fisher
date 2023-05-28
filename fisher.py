@@ -1,4 +1,4 @@
-
+#!/bin/python3
 
 #! json format
 # "name":{
@@ -25,7 +25,7 @@ images = {
     "ubuntu":"kasmweb/core-ubuntu-focal:1.13.0-rolling",
     "desktop":"kasmweb/ubuntu-bionic-desktop:1.10.0-rolling"
 }
-ip = subprocess.getoutput("ip a | grep "eth0" | grep "inet" | awk '{print $2}' | cut -d "/" -f 1")
+ip = subprocess.getoutput("ip a | grep \"eth0\" | grep \"inet\" | awk \'{print $2}\' | cut -d \"/\" -f 1")
 #* path creating section
 #! use platform.system() => import platform
 PATH = platform.system()
@@ -121,7 +121,7 @@ def createContainer(image,name,root,password,description):
     while True:
         randport = random.randint(10,99)
         port = "60"+str(randport)
-        if(port not in temp)
+        if(port not in temp):
             break
     #* add to json file
 
@@ -349,4 +349,3 @@ exit
         case _:
             print("invalid command")
             pass
-
