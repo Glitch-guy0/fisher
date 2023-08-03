@@ -23,7 +23,8 @@ from sys import exit
 #* images section
 images = {
     "ubuntu":"kasmweb/core-ubuntu-focal:1.13.0-rolling",
-    "desktop":"kasmweb/ubuntu-bionic-desktop:1.10.0-rolling"
+    "desktop":"kasmweb/ubuntu-bionic-desktop:1.10.0-rolling",
+    "kali":"kasmweb/kali-rolling-desktop:develop"
 }
 ip = subprocess.getoutput("ip a | grep \"eth0\" | grep \"inet\" | awk \'{print $2}\' | cut -d \"/\" -f 1")
 #* path creating section
